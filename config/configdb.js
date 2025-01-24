@@ -37,3 +37,4 @@ const connect = async(dbName)=> {
 }
 
 module.exports = connect;
+// V1.0
