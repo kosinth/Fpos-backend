@@ -49,8 +49,8 @@ router.post('/report/product/:dateparam', async(req, res) => {
         try{
             const arrDateParam = sell.split(',')
             console.log('Report product date from to  : ',arrDateParam[0] + " to " + arrDateParam[1])
-            
-            let sqlStr = "SELECT COUNT(a.prodt_id) as cnt ,b.prodt_name ,a.prodt_id "
+
+            let sqlStr = "SELECT sum(a.prodt_qty) as cnt ,b.prodt_name ,a.prodt_id ,sum(a.prodt_price) as sum_prodt "
             sqlStr +=  " FROM tbOrder_details a ,tbProduct b "
             sqlStr +=  ` where DATE_FORMAT(a.order_timestamp, '%Y-%m-%d') between DATE_FORMAT('${arrDateParam[0]}', '%Y-%m-%d') `
             sqlStr +=  ` and DATE_FORMAT('${arrDateParam[1]}', '%Y-%m-%d') `
