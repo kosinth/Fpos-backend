@@ -1,0 +1,29 @@
+const mysql = require("mysql"); 
+require('dotenv').config();
+
+const connect = async(dbName)=> { 
+    const HOST_NAME = process.env.HOST_NAME
+    const MYSQL_USERNAME = process.env.MYSQL_USERNAME
+    const MYSQL_PASSWORD = process.env.MYSQL_PASSWORD
+    const MYSQL_PORT = process.env.MYSQL_PORT
+    let connection =''
+    try {
+            connection = await mysql.createConnection({
+            host : `${HOST_NAME}`,
+            user : `${MYSQL_USERNAME}`,
+            password : `${MYSQL_PASSWORD}`,
+            port:`${MYSQL_PORT}`
+        })
+
+        return connection;
+
+    }catch (error) {
+        console.error('Error connecting to Db :', error);
+        connection = undefined;
+        setTimeout(connect, 5000);
+    }
+}
+
+module.exports = connect;
+
+
