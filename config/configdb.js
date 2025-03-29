@@ -28,7 +28,7 @@ const connect = async(dbName)=> {
         // }
         //connection = await mysql.createConnection(db_config);
         //console.log('xxx ',connection)
-        
+        //test branch        
         return connection;
     }catch (error) {
         console.error('Error connecting to Db :', error);
