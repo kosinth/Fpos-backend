@@ -15,7 +15,7 @@ exports.login = async (req,res) =>{
             const results = await db.query(`SELECT * FROM tbUser where user_name = '${dataLogin.user_name}';`);
             // select user from DB  check avaible User
             if(results[0].length==1){
-                // check Password
+                // check Password  kosin hi 555
                 //console.log('key =---> ',PRIVATE_KEY)
                 const resultData = results[0];
                 const usr_name =dataLogin.user_name;
