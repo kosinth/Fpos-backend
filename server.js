@@ -19,5 +19,5 @@ readdirSync('./Routes')
     .map((r) => app.use('/api',require('./Routes/' +r)))
 
 app.listen(port,(req,res) =>{
-    console.log(`server is running port ${port}`)
+    console.log(`server is running port ==> ${port}`)
 })
