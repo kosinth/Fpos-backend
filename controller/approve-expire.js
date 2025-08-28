@@ -149,7 +149,7 @@ exports.approveuser = async (req,res) =>{
             )
 
             // Create DB
-            let databaseName = 'fposDb_'+id; 
+            let databaseName = 'cposDb_'+id; 
             console.log("  Db : --> ",databaseName);
             const dbcreate = await connCreate(databaseName);
             let createQuery = ` CREATE DATABASE IF NOT EXISTS  ${databaseName}`; 

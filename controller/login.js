@@ -7,6 +7,8 @@ require('dotenv').config();
 exports.login = async (req,res) =>{
 
     const db = await conn('fposDb');
+    //const db = await conn('Cpos_db');
+
     if(db){
         try{
             let dataLogin = req.body

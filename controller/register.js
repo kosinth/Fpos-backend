@@ -7,6 +7,7 @@ const smtpTransport = require('nodemailer-smtp-transport');
 exports.register = async (req,res) =>{
     
     const db = await conn('fposDb');
+    //const db = await conn('Cpos_db');
     if(db){
         try{
             let dataUser = req.body
