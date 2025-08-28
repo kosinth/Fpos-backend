@@ -149,7 +149,7 @@ exports.approveuser = async (req,res) =>{
             )
 
             // Create DB
-            let databaseName = 'cposDb_'+id; 
+            let databaseName = 'fposDb_'+id; 
             console.log("  Db : --> ",databaseName);
             const dbcreate = await connCreate(databaseName);
             let createQuery = ` CREATE DATABASE IF NOT EXISTS  ${databaseName}`; 
@@ -254,7 +254,7 @@ exports.approvedelete = async (req,res) =>{
                 msg : err.message
             })
             db.end();
-            console.error('Error,file:approve-expire.js[ delete api:/approve-delete/:id] =>',err.message)
+            //console.error('Error,file:approve-expire.js[ delete api:/approve-delete/:id] =>',err.message)
         }
 
     }else{
