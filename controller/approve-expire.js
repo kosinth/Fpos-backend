@@ -160,7 +160,25 @@ exports.approveuser = async (req,res) =>{
                 dbcreate.query(useQuery, (error) => { 
                     if(error) throw error; 
                     // create Table tbOrder
-                    let sql = "CREATE TABLE IF NOT EXISTS  tbOrder ( order_id int NOT NULL,"
+ 
+
+
+                let sql = "CREATE TABLE IF NOT EXISTS  tbUser_admin ( shop_id int NOT NULL,"
+                sql+= " user_name varchar(15)  NOT NULL,"
+                sql+= " user_password varchar(100) NOT NULL,"
+                sql+= " user_role varchar(100) NOT NULL,"
+                sql+= " user_timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,"
+                sql+= " PRIMARY KEY (`shop_id`)"
+                sql+= "  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci "
+                dbcreate.query(sql, function (err, result) {
+                if (err) throw err;
+                    console.log(" tbUser_admin created");
+                });
+
+
+
+ 
+                sql  = "CREATE TABLE IF NOT EXISTS  tbOrder ( order_id int NOT NULL,"
                         sql+= " order_list_cnt smallint NOT NULL,"
                         sql+= " order_total double NOT NULL,"
                         sql+= " order_sum_total double NOT NULL,"
@@ -307,4 +325,3 @@ exports.approvesearch = async (req,res) =>{
     } 
 
 }
-

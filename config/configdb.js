@@ -10,6 +10,7 @@ const connect = async(dbName)=> {
     let connection =''
     try {
             connection = await mysql.createConnection({
+            //connection = await mysql.createPool({
             host : `${HOST_NAME}`,
             user : `${MYSQL_USERNAME}`,
             password : `${MYSQL_PASSWORD}`,
