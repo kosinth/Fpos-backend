@@ -1,12 +1,14 @@
 const mysql = require("mysql"); 
 require('dotenv').config();
 
-const connect = async(dbName)=> { 
+const connect = async()=> { 
     const HOST_NAME = process.env.HOST_NAME
     const MYSQL_USERNAME = process.env.MYSQL_USERNAME
     const MYSQL_PASSWORD = process.env.MYSQL_PASSWORD
     const MYSQL_PORT = process.env.MYSQL_PORT
     let connection =''
+
+
     try {
             connection = await mysql.createConnection({
             host : `${HOST_NAME}`,

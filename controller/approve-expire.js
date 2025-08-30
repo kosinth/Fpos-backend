@@ -128,40 +128,24 @@ exports.getApproveUser = async (req,res) =>{
 
 }
 
-// approve set expire_date and generate DB
-exports.approveuser = async (req,res) =>{
+async function fetchDataAsync(id) {
+  try {
 
-    const db = await conn('fposDb');
-    if(db){
-        try{
-            let id = req.params.id
-            const results = await db.query(
-                                'UPDATE tbUser SET user_approve=1 WHERE shop_id = ? ',
-                                [id]
-                            )
-            //set Expire date
-            const results_1 = await db.query( `SELECT DATE_FORMAT(CURDATE() + INTERVAL 1 year, '%y-%m-%d') as expireDate ; `);
-             let expire = results_1[0];
-             expire = expire[0].expireDate
-             const results_2 = await db.query(
-                `UPDATE tbUser SET user_expire = '${expire}'  WHERE shop_id = ? `,
-                [id]
-            )
-
+    //const response = await fetch('/endpoint');
+    //const summary = await response.text();
+    
             // Create DB
             let databaseName = 'fposDb_'+id; 
             console.log("  Db : --> ",databaseName);
             const dbcreate = await connCreate(databaseName);
             let createQuery = ` CREATE DATABASE IF NOT EXISTS  ${databaseName}`; 
-            dbcreate.query(createQuery, (err) => { 
+             await dbcreate.query(createQuery, (err) => { 
                 if(err) throw err; 
                 console.log(`Database [ ${databaseName} ] Created Successfully !`); 
                 let useQuery = `USE ${databaseName}`; 
                 dbcreate.query(useQuery, (error) => { 
-                    if(error) throw error; 
-                    // create Table tbOrder
- 
-
+                if(error) throw error; 
+                // create Table tbOrder
 
                 let sql = "CREATE TABLE IF NOT EXISTS  tbUser_admin ( shop_id int NOT NULL,"
                 sql+= " user_name varchar(15)  NOT NULL,"
@@ -175,9 +159,6 @@ exports.approveuser = async (req,res) =>{
                     console.log(" tbUser_admin created");
                 });
 
-
-
- 
                 sql  = "CREATE TABLE IF NOT EXISTS  tbOrder ( order_id int NOT NULL,"
                         sql+= " order_list_cnt smallint NOT NULL,"
                         sql+= " order_total double NOT NULL,"
@@ -221,6 +202,39 @@ exports.approveuser = async (req,res) =>{
                 }) 
             }); 
 
+
+    
+    //console.log(summary);
+  
+
+} catch (error) {
+    console.log('Error:' + error.message);
+  }
+}
+
+
+
+// approve set expire_date and generate DB
+exports.approveuser = async (req,res) =>{
+
+    const db = await conn('fposDb');
+    if(db){
+        try{
+            let id = req.params.id
+            const results = await db.query(
+                                'UPDATE tbUser SET user_approve=1 WHERE shop_id = ? ',
+                                [id]
+                            )
+            //set Expire date
+            const results_1 = await db.query( `SELECT DATE_FORMAT(CURDATE() + INTERVAL 1 year, '%y-%m-%d') as expireDate ; `);
+             let expire = results_1[0];
+             expire = expire[0].expireDate
+             const results_2 = await db.query(
+                `UPDATE tbUser SET user_expire = '${expire}'  WHERE shop_id = ? `,
+                [id]
+            )
+
+
             console.log(`file:approve-exprire.js[ api:approve-approveuser/:id ] ID --> ${id} `,'ok ')
             res.json({
                 statusUpdate : 1
@@ -228,7 +242,14 @@ exports.approveuser = async (req,res) =>{
             })
             db.end();
 
-            // check expire date where date
+
+
+// Call fetchDataAsync()
+    await fetchDataAsync(id);
+     console.log('ok')
+
+
+// check expire date where date
             //select * from tbUser a 
             //WHERE DATE_FORMAT(a.user_expire, '%Y-%m-%d') < DATE_FORMAT(CURDATE(), '%Y-%m-%d')
 
@@ -321,6 +342,57 @@ exports.approvesearch = async (req,res) =>{
         res.status(500).json({
         err : 'มีข้อผิดพลาด : ',
         msg : 'Error,file:approve-expire.js[ delete api:/approve-search]|Connection to Database fail ---> Error Access denied'   
+        })
+    } 
+
+}
+
+
+
+exports.approveaddData = async (req,res) =>{
+
+    let id = req.params.id
+    const db = await conn('fposDb');
+    console.log(' start -- >' ,id)
+    if(db){
+        try{
+            
+            const [rows] = await db.execute(
+                "SELECT shop_id, user_name, user_password FROM tbUser WHERE shop_id = ? AND user_approve = 1",
+                [id]
+            );
+
+            rows.map(row => ({
+                shop_id: row.shop_id,
+                user_name: row.user_name,
+                user_password: row.user_password
+            }));
+            console.log( 'get data tbUser---> ' ,parseInt(rows[0].shop_id) ,rows[0].user_name,rows[0].user_password)
+            let databaseName = 'fposDb_'+id; 
+            const db1 = await conn(databaseName);
+
+            const [result] = await db1.execute(
+                "INSERT INTO tbUser_admin (shop_id, user_name, user_password, user_role) VALUES (?, ?, ?, ?)",
+                [parseInt(rows[0].shop_id), rows[0].user_name, rows[0].user_password, '0']   // values to insert
+            );
+
+            console.log("Inserted ID:", result.insertId);
+            db1.end();
+            db.end();
+        
+        }catch(err){
+            res.status(500).json({
+                err : ' มีข้อผิดพลาด ',
+                msg : err.message
+            })
+            db.end();
+            console.error('Error,file:approve-expire.js[ post api:/approve-addData/:id] =>',err.message)
+        }
+
+    }else{
+        res.status(500).json({
+        err : 'มีข้อผิดพลาด : ',
+        msg : 'Error,file:approve-expire.js[ post api:/approve-addData/:id]|Connection to Database fail ---> Error Access denied'   
         })
     } 
 

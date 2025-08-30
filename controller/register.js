@@ -119,7 +119,7 @@ const fnGenerateId = async(db)=>{
             to: maillist,
             cc: 'kosinth.bua@outlook.co.th',
             subject: 'Fast-PoS : ข้อมูลการใช้งานระบบ',
-            text: ` ข้อมูลระบบ  Fast-PoS  \n รหัสร้านค้า ID ---> ${mailText[0]} \n User Login (ชื่อสำหรับ Login) ---> ${mailText[1]}  \n Password ( รหัส ) ---> ${mailText[2]}  \n  --------------------------------------- \n  วันที่ลงทะเบียน  ${dat_date} \n ขอบคุณที่ลงทะเบียนและใช้บริการ Fast-PoS   \n สงวนสิขสิทธิ บริษัท บัว-ซอฟต์ เทคโนโลยี จำกัด ` 
+            text: ` ข้อมูลระบบ  Fast-PoS  \n รหัสร้านค้า ID ---> ${mailText[0]} \n User Login (ชื่อสำหรับ Login) ---> ${mailText[1]}  \n Password ( รหัสผ่าน ) ---> ${mailText[2]}  \n  --------------------------------------- \n  วันที่ลงทะเบียน  ${dat_date} \n ขอบคุณที่ลงทะเบียนและใช้บริการ Fast-PoS   \n สงวนสิขสิทธิ บริษัท กระเพรา-ซอฟต์ จำกัด ` 
 
         };
             
