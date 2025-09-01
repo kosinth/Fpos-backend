@@ -147,12 +147,13 @@ async function fetchDataAsync(id) {
                 if(error) throw error; 
                 // create Table tbOrder
 
-                let sql = "CREATE TABLE IF NOT EXISTS  tbUser_admin ( shop_id int NOT NULL,"
+                let sql = "CREATE TABLE IF NOT EXISTS tbUser_admin (user_id int NOT NULL AUTO_INCREMENT," 
+                sql+= " shop_id int NOT NULL,"
                 sql+= " user_name varchar(15)  NOT NULL,"
                 sql+= " user_password varchar(100) NOT NULL,"
                 sql+= " user_role varchar(100) NOT NULL,"
                 sql+= " user_timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,"
-                sql+= " PRIMARY KEY (`shop_id`)"
+                sql+= " PRIMARY KEY (`user_id`)"
                 sql+= "  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci "
                 dbcreate.query(sql, function (err, result) {
                 if (err) throw err;
@@ -370,13 +371,11 @@ exports.approveaddData = async (req,res) =>{
             console.log( 'get data tbUser---> ' ,parseInt(rows[0].shop_id) ,rows[0].user_name,rows[0].user_password)
             let databaseName = 'fposDb_'+id; 
             const db1 = await conn(databaseName);
-
             const [result] = await db1.execute(
                 "INSERT INTO tbUser_admin (shop_id, user_name, user_password, user_role) VALUES (?, ?, ?, ?)",
                 [parseInt(rows[0].shop_id), rows[0].user_name, rows[0].user_password, '0']   // values to insert
             );
-
-            console.log("Inserted ID:", result.insertId);
+            console.log(`Inserted tbUser_admin -- ${databaseName}--> ok `);
             db1.end();
             db.end();
         
